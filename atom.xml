@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://xk2013.github.io</id>
+    <title>xk2013 的温馨蛇窝</title>
+    <updated>2024-04-25T09:34:53.633Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://xk2013.github.io"/>
+    <link rel="self" href="https://xk2013.github.io/atom.xml"/>
+    <subtitle>子曰：学而时习之，不亦说乎？</subtitle>
+    <logo>https://xk2013.github.io/images/avatar.png</logo>
+    <icon>https://xk2013.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, xk2013 的温馨蛇窝</rights>
+    <entry>
+        <title type="html"><![CDATA[P5246 [集训队互测 2016] 消失的源代码 题解]]></title>
+        <id>https://xk2013.github.io/ZYigfdYWF/</id>
+        <link href="https://xk2013.github.io/ZYigfdYWF/">
+        </link>
+        <updated>2024-04-13T01:20:03.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[【洛谷规则怪谈】第一章 - 序章]]></title>
+        <id>https://xk2013.github.io/eyHUWj-AU/</id>
+        <link href="https://xk2013.github.io/eyHUWj-AU/">
+        </link>
+        <updated>2024-04-10T13:47:31.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://xk2013.github.io/about/</id>
+        <link href="https://xk2013.github.io/about/">
+        </link>
+        <updated>2024-04-09T13:22:57.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[如何用 C++ 演奏《起风了》]]></title>
+        <id>https://xk2013.github.io/0VwjWXREm/</id>
+        <link href="https://xk2013.github.io/0VwjWXREm/">
+        </link>
+        <updated>2024-04-09T13:10:52.000Z</updated>
+    </entry>
+</feed>

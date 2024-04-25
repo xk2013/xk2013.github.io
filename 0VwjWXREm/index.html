@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>如何用 C++ 演奏《起风了》 | xk2013 的温馨蛇窝</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://xk2013.github.io/favicon.ico?v=1714037692243">
+<link rel="stylesheet" href="https://xk2013.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="如何用 C++ 演奏《起风了》
+这是一个让学编程的和学音乐的都沉默的大问题。
+理论基础
+MIDI 音乐是一种古老的 Windows 文件格式，适用于当时存储空间很小的音乐存储。本项目使用 MIDI 格式乐谱来实现演奏。
+（Mac 和 Lin..." />
+    <meta name="keywords" content="干货" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://xk2013.github.io">
+        <img src="https://xk2013.github.io/images/avatar.png?v=1714037692243" class="site-logo">
+        <h1 class="site-title">xk2013 的温馨蛇窝</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/xk2013" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      子曰：学而时习之，不亦说乎？
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://xk2013.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">如何用 C++ 演奏《起风了》</h2>
+            <div class="post-date">2024-04-09</div>
+            
+              <div class="feature-container" style="background-image: url('http://i2.hdslb.com/bfs/archive/8cf681f414f5b69b6e8078d63720429aa9437f86.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="如何用-c-演奏起风了">如何用 C++ 演奏《起风了》</h1>
+<p>这是一个让学编程的和学音乐的都沉默的大问题。</p>
+<h2 id="理论基础">理论基础</h2>
+<p><code>MIDI</code> 音乐是一种古老的 Windows 文件格式，适用于当时存储空间很小的音乐存储。本项目使用 <code>MIDI</code> 格式乐谱来实现演奏。</p>
+<p>（Mac 和 Linux 用户可以走了）</p>
+<h2 id="实现原理">实现原理</h2>
+<p>理论上我们只要把乐谱存进代码或文件里，然后用 Windows 的 <code>MIDI API</code> 函数来演奏内存中的乐谱就可以了。</p>
+<pre><code class="language-cpp">#include &lt;Windows.h&gt;          // 导入 Windows API
+#pragma comment(lib, &quot;winmm.lib&quot;) // 引用 MIDI API
+</code></pre>
+<p>可 <code>MIDI</code> 的乐谱是纯数字的，这时候学音乐的表示不同意：“乐谱总得让人能看懂吧！”为了解决这一个毫不起眼的小问题，我们可以使用枚举类型、宏定义，在这里笔者选择用 <code>#define</code> 宏定义。</p>
+<pre><code class="language-cpp">#pragma once
+
+#define Rest 0
+
+#define C8  108
+
+#define B7  107
+#define A7s 106
+#define A7  105
+#define G7s 104
+#define G7  103
+#define F7s 102
+#define F7  101
+#define E7  100
+#define D7s  99
+#define D7   98
+#define C7s  97
+#define C7   96
+
+#define B6   95
+#define A6s  94
+#define A6   93
+#define G6s  92
+#define G6   91
+#define F6s  90
+#define F6   89
+#define E6   88
+#define D6s  87
+#define D6   86
+#define C6s  85
+#define C6   84
+
+#define B5   83
+#define A5s  82
+#define A5   81
+#define G5s  80
+#define G5   79
+#define F5s  78
+#define F5   77
+#define E5   76
+#define D5s  75
+#define D5   74
+#define C5s  73
+#define C5   72
+
+#define B4   71
+#define A4s  70
+#define A4   69
+#define G4s  68
+#define G4   67
+#define F4s  66
+#define F4   65
+#define E4   64
+#define D4s  63
+#define D4   62
+#define C4s  61
+#define C4   60
+
+#define B3   59
+#define A3s  58
+#define A3   57
+#define G3s  56
+#define G3   55
+#define F3s  54
+#define F3   53
+#define E3   52
+#define D3s  51
+#define D3   50
+#define C3s  49
+#define C3   48
+
+#define B2   47
+#define A2s  46
+#define A2   45
+#define G2s  44
+#define G2   43
+#define F2s  42
+#define F2   41
+#define E2   40
+#define D2s  39
+#define D2   38
+#define C2s  37
+#define C2   36
+
+#define B1   35
+#define A1s  34
+#define A1   33
+#define G1s  32
+#define G1   31
+#define F1s  30
+#define F1   29
+#define E1   28
+#define D1s  27
+#define D1   26
+#define C1s  25
+#define C1   24
+
+#define B0   23
+#define A0s  22
+#define A0   21
+
+
+#define X1   C2
+#define X2   D2
+#define X3   E2
+#define X4   F2
+#define X5   G2
+#define X6   A2
+#define X7   B2
+
+#define L1   C3
+#define L2   D3
+#define L3   E3
+#define L4   F3
+#define L5   G3
+#define L6   A3
+#define L7   B3
+
+#define M1   C4
+#define M2   D4
+#define M3   E4
+#define M4   F4
+#define M5   G4
+#define M6   A4
+#define M7   B4
+
+#define H1   C5
+#define H2   D5
+#define H3   E5
+#define H4   F5
+#define H5   G5
+#define H6   A5
+#define H7   B5
+
+
+#define LOW_SPEED    500
+#define MIDDLE_SPEED 400
+#define HIGH_SPEED   300
+
+
+#define _         0x00ff
+</code></pre>
+<p>定义好这些音符后，我们就可以来写我们的乐谱啦！你问我用什么？当然用数组啊！</p>
+<pre><code class="language-cpp">int wind[] =
+{
+     400,0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,0,L7,M1,M2,M3,300,L2,0,M5,M3,M2,M3,M1,M2,L7,M1,300,L5,0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,0,L7,M1,M2,M3,300,L2,0,M5,M3,M2,M3,M1,M2,L7,M1,300,L5,
+     0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,0,L7,M1,M2,M3,300,L2,0,M5,M3,M2,M3,M1,M2,L7,M1,300,L5,0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,
+     0,M6,M3,M2,L6,M3,L6,M2,M3,L6,_,_,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M1,300,M2,700,0,M1,M2,M3,M2,M1,300,L5,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M3,300,M2,0,M1,700,300,M2,_,_,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M3,300,M2,0,M1,700,300,L6,_,
+     0,M3,M2,M1,M2,300,M1,_,0,M3,M2,M1,M2,300,M1,700,0,L5,M3,M2,M1,M2,300,M1,_,_,_,
+     M1,M2,M3,M1,M6,0,M5,M6,300,_,700,0,M1,300,M7,0,M6,M7,300,_,_,M7,0,M6,M7,300,_,M3,0,H1,H2,H1,M7,300,M6,M5,M6,0,M5,M6,_,M5,M6,M5,300,M6,0,M5,M2,300,_,0,M5,700,300,M3,_,_,_,
+     M1,M2,M3,M1,M6,0,M5,M6,300,_,700,0,M1,300,M7,0,M6,M7,300,_,_,M7,0,M6,M7,300,_,M3,0,H1,H2,H1,M7,300,M6,M5,M6,0,H3,H3,300,_,M5,M6,0,H3,H3,300,_,0,M5,700,300,M6,_,_,_,_,_,
+     H1,H2,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H2,0,H1,M6,300,_,0,H1,H1,300,H2,0,H1,300,M6,700,0,_,300,H1,700,H3,_,0,H3,H4,H3,H2,H3,300,H2,700,
+     H1,H2,H3,0,H6,H5,_,H6,H5,_,H6,H5,300,_,H3,H3,0,H6,H5,_,H6,H5,_,H6,H5,700,300,H3,700,H2,0,H1,M6,700,300,
+     H3,700,H2,0,H1,300,M6,700,H1,H1,_,_,_,_,_,
+     0,M6,300,H3,700,H2,0,H1,M6,700,300,H3,H2,700,300,0,H1,M6,300,700,H1,H1,_,_,
+     0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,0,L7,M1,M2,M3,300,L2,0,M5,M3,M2,M3,M1,M2,L7,M1,300,L5,0,L7,M1,M2,M3,300,L3,0,M5,M3,300,L2,L5,2,_,
+     0,M6,M3,M2,L6,M3,L6,M2,M3,L6,_,_,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M1,300,M2,700,0,M1,M2,M3,M2,M1,300,L5,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M3,300,M2,0,M1,700,300,M2,_,_,_,
+     M2,700,0,M1,300,M2,700,0,M1,300,M2,M3,M5,0,M3,700,300,M2,700,0,M3,300,M2,0,M1,700,300,L6,_,
+     0,M3,M2,M1,M2,300,M1,_,0,M3,M2,M1,M2,300,M1,700,0,L5,M3,M2,M1,M2,300,M1,_,_,_,
+     M1,M2,M3,M1,M6,0,M5,M6,300,_,700,0,M1,300,M7,0,M6,M7,300,_,_,M7,0,M6,M7,300,_,M3,0,H1,H2,H1,M7,300,M6,M5,M6,0,M5,M6,_,M5,M6,M5,300,M6,0,M5,M2,300,_,0,M5,700,300,M3,_,_,_,
+     M1,M2,M3,M1,M6,0,M5,M6,300,_,700,0,M1,300,M7,0,M6,M7,300,_,_,M7,0,M6,M7,300,_,M3,0,H1,H2,H1,M7,300,M6,M5,M6,0,H3,H3,300,_,M5,M6,0,H3,H3,300,_,0,M5,700,300,M6,_,_,_,_,_,
+     H1,H2,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H2,0,H1,M6,300,_,0,H1,H1,300,H2,0,H1,300,M6,700,0,_,300,H1,700,H3,_,0,H3,H4,H3,H2,H3,300,H2,700,
+     H1,H2,H3,0,H6,H5,_,H6,H5,_,H6,H5,300,_,H3,H3,0,H6,H5,_,H6,H5,_,H6,H5,700,300,H3,700,H2,0,H1,M6,700,300,
+     H3,700,H2,0,H1,300,M6,700,H1,H1,_,_,_,_,_,
+     H1,H2,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H2,0,H1,M6,300,_,0,H1,H1,300,H2,0,H1,300,M6,700,0,_,300,H1,700,H3,_,0,H3,H4,H3,H2,H3,300,H2,700,
+     H1,H2,H3,0,H6,H5,_,H6,H5,_,H6,H5,300,_,H3,H3,0,H6,H5,_,H6,H5,_,H6,H5,700,300,H3,700,H2,0,H1,M6,700,300,
+     H3,700,H2,0,H1,300,M6,700,H1,H1,_,_,_,_,_,
+     H1,H2,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H3,0,H6,H5,300,_,0,H6,H5,300,_,0,H6,H5,300,_,0,H2,H3,300,H2,0,H1,M6,300,_,0,H1,H1,300,H2,0,H1,300,M6,700,0,_,300,H1,700,H3,_,0,H3,H4,H3,H2,H3,300,H2,700,
+     H1,H2,H3,0,H6,H5,_,H6,H5,_,H6,H5,300,_,H3,H3,0,H6,H5,_,H6,H5,_,H6,H5,700,300,H3,700,H2,0,H1,M6,700,300,
+     H3,700,H2,0,H1,300,M6,700,H1,H1,_,_,_,_,_,
+     0,M6,300,H3,700,H2,0,H1,M6,700,300,H3,H2,700,300,0,H1,M6,300,700,H1,H1,_,_,_,_,_,_,_,
+};
+</code></pre>
+<p>乐谱写好之后，我们编写一个 <code>Wind(void)</code> 函数，用来播放《起风了》这首歌。</p>
+<pre><code class="language-cpp">void Wind(void)
+{
+    HMIDIOUT handle;
+    midiOutOpen(&amp;handle, 0, 0, 0, CALLBACK_NULL);
+    int volume = 0x7f;
+    int voice = 0x0;
+    int sleep = 350;
+  
+    for (auto i : wind) { // 这里使用了 C++ 11 的特性
+    	if (i == 0) { sleep = 175; continue; }
+    	if (i == 700) { Sleep(175); continue; }
+    	if (i == 300) { sleep = 350; continue; }
+    	if (i == _) {
+        	Sleep(350); // 同下
+        	continue;
+        }
+    }
+    
+    voice = (volume &lt;&lt; 16) + ((i) &lt;&lt; 8) + 0x90;
+    std::cout &lt;&lt; voice &lt;&lt; std::endl;
+    midiOutShortMsg(handle, voice);
+    Sleep(sleep); // 控制节奏
+	midiOutClose(handle);
+}
+</code></pre>
+<p>最后再编写一个 <code>main</code> 函数就大功告成啦！</p>
+<pre><code class="language-cpp">int main(void)
+{
+    Wind();
+    return 0; // 笔者喜欢 return 0;
+}
+</code></pre>
+<p>编译运行！听到歌声了吗？这就是编程的魅力！<br>
+PS：如果编译错误，请注意一下 <code>C++</code> 版本，一定要在 <code>C++ 11</code> 以上哦！</p>
+<p>转载于 <a href="https://www.bilibili.com/video/BV1tv4y1D7iW/">https://www.bilibili.com/video/BV1tv4y1D7iW/</a>。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://xk2013.github.io/29yNq9H75/" class="tag">
+                    干货
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '6fa4a8444ff82699073d',
+        clientSecret: 'e64dbb830e967e554e2c12444d46f524d07e1148',
+        repo: 'https://github.com/xk2013/xk2013.github.io',
+        owner: 'xk2013',
+        admin: ['xk2013'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
